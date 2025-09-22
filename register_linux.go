@@ -1,6 +1,6 @@
 //go:build linux
 
-package microzilla
+package main
 
 import (
 	"fmt"

@@ -1,6 +1,6 @@
 //go:build windows
 
-package microzilla
+package main
 
 import (
 	"fmt"

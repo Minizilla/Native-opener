@@ -1,6 +1,6 @@
 //go:build !darwin
 
-package microzilla
+package main
 
 func registerMac(protocol, progPath string) {
 	// empty declaration, for compilation / typing
