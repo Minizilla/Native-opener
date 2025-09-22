@@ -9,21 +9,55 @@ import (
 	"path/filepath"
 )
 
-func registerLinux(protocol, progPath string) {
-	desktopFile := fmt.Sprintf(`[Desktop Entry]
-Name=%s
-Exec=%s %%u
-Type=Application
-Terminal=false
-MimeType=x-scheme-handler/%s;
-`, protocol, progPath, protocol)
+func registerMac(protocol, progPath string) {
+	// macOS implementation for protocol registration
+	// This would typically involve creating a .app bundle or using Launch Services
+	// For now, we'll use a simple approach with URL schemes
 
-	appDir := filepath.Join(os.Getenv("HOME"), ".local/share/applications")
-	os.MkdirAll(appDir, 0755)
-	desktopPath := filepath.Join(appDir, protocol+".desktop")
-	os.WriteFile(desktopPath, []byte(desktopFile), 0644)
+	// Create the application bundle structure
+	appName := protocol + ".app"
+	appPath := filepath.Join(os.Getenv("HOME"), "Applications", appName)
+	contentsPath := filepath.Join(appPath, "Contents")
+	macosPath := filepath.Join(contentsPath, "MacOS")
 
-	exec.Command("xdg-mime", "default", protocol+".desktop", "x-scheme-handler/"+protocol).Run()
+	// Create directories
+	os.MkdirAll(macosPath, 0755)
+
+	// Create Info.plist
+	infoPlist := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleExecutable</key>
+	<string>%s</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.microzilla.%s</string>
+	<key>CFBundleName</key>
+	<string>%s</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>%s URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>%s</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>`, filepath.Base(progPath), protocol, protocol, protocol, protocol)
+
+	infoPlistPath := filepath.Join(contentsPath, "Info.plist")
+	os.WriteFile(infoPlistPath, []byte(infoPlist), 0644)
+
+	// Copy the executable
+	executablePath := filepath.Join(macosPath, filepath.Base(progPath))
+	exec.Command("cp", progPath, executablePath).Run()
+	exec.Command("chmod", "+x", executablePath).Run()
+
+	// Register with Launch Services
+	exec.Command("open", appPath).Run()
 
 	fmt.Printf("✅ Protocole %s:// enregistré -> %s\n", protocol, progPath)
 }
