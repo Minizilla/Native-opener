@@ -16,13 +16,6 @@ func main() {
 	protocol := os.Args[1]
 	programName := os.Args[2]
 
-	switch runtime.GOOS {
-	case "windows":
-		programName += ".exe"
-	case "linux", "darwin":
-		programName += ".bin"
-	}
-
 	progPath, err := filepath.Abs(programName)
 	if err != nil {
 		panic(err)
