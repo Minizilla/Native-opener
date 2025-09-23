@@ -48,3 +48,39 @@ func TestHandlesNoProtocol(t *testing.T) {
 		t.Error("ExtractArgs should return '", args, "' but returned '", ExtractArgs(uri), "'")
 	}
 }
+
+func TestHandlesPathsWithSpaces(t *testing.T) {
+	const uri = "freecad://My Documents/bridge.dxf"
+	const args = "My Documents/bridge.dxf"
+
+	if args != ExtractArgs(uri) {
+		t.Error("ExtractArgs should return '", args, "' but returned '", ExtractArgs(uri), "'")
+	}
+}
+
+func TestHandlesEncodedSpaces(t *testing.T) {
+	const uri = "freecad://My%20Documents/bridge.dxf"
+	const args = "My Documents/bridge.dxf"
+
+	if args != ExtractArgs(uri) {
+		t.Error("ExtractArgs should return '", args, "' but returned '", ExtractArgs(uri), "'")
+	}
+}
+
+func TestHandlesComplexPaths(t *testing.T) {
+	const uri = "trueview://C:/Program Files/My App (v2.0)/file.dwg"
+	const args = "C:/Program Files/My App (v2.0)/file.dwg"
+
+	if args != ExtractArgs(uri) {
+		t.Error("ExtractArgs should return '", args, "' but returned '", ExtractArgs(uri), "'")
+	}
+}
+
+func TestHandlesEncodedSpecialChars(t *testing.T) {
+	const uri = "freecad://My%20App%20%28v2.0%29/file.dxf"
+	const args = "My App (v2.0)/file.dxf"
+
+	if args != ExtractArgs(uri) {
+		t.Error("ExtractArgs should return '", args, "' but returned '", ExtractArgs(uri), "'")
+	}
+}

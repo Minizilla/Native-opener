@@ -59,6 +59,7 @@ func registerMac(protocol, progPath, args string) {
 	}
 
 	// Create wrapper script with arguments
+	// Quote paths to handle spaces in directory names
 	wrapperScript := fmt.Sprintf(`#!/bin/bash
 exec "%s" "%s" %s "$@"
 `, wrapperPath, progPath, args)

@@ -16,10 +16,12 @@ func registerLinux(protocol, progPath, args string) {
 		// Fallback: assume wrapper is in the same directory
 		wrapperPath = "./uri-wrapper"
 	}
-	
+	fmt.Println("Wrapper path:", wrapperPath)
+
 	// Build the command: uri-wrapper <target_program> [args] <uri>
-	wrapperCmd := fmt.Sprintf("%s %s %s", wrapperPath, progPath, args)
-	
+	// Quote paths to handle spaces in directory names
+	wrapperCmd := fmt.Sprintf("\"%s\" \"%s\" %s", wrapperPath, progPath, args)
+
 	desktopFile := fmt.Sprintf(`[Desktop Entry]
 Name=%s
 Exec=%s %%u
