@@ -1,28 +1,28 @@
 # Native-opener
 
-Un outil pour enregistrer des handlers d'URI personnalisés sur Linux, Windows et macOS.
+A tool to register custom URI handlers on Linux, Windows and macOS.
 
-## Comment ça fonctionne
+## How it works
 
-- Native-opener sauvegarde dans le fichier de config de votre OS que ce dernier doit appeler un wrapper go quand il recoit `monapp://monfichier.pdf`
+- Native-opener saves in your OS config file that it should call a Go wrapper when it receives `myapp://myfile.pdf`
 
-- Ce wrapper s'occupe de récuperer lees arguments comme `monfichier.pdf` et les passe à l'application que vous avait demandé dans l'enregistrelent de l'ui
+- This wrapper handles extracting arguments like `myfile.pdf` and passes them to the application you specified during URI registration
 
-## Utilisation
+## Usage
 
-### 1. Compiler les outils
+### 1. Compile the tools
 
 ```bash
 make all
 ```
 
-### 2. Enregistrer un handler d'URI
+### 2. Register a URI handler
 
 ```bash
-./native-opener monapp /chemin/vers/votre/programme/a/executer
+./native-opener myapp /path/to/your/program/to/execute
 ```
 
-### 3. Utiliser l'URI
+### 3. Use the URI
 
-Quand quelqu'un clique sur `monapp://monfichier.pdf`, votre programme sera lancé avec `monfichier.pdf` comme argument.
+When someone clicks on `myapp://myfile.pdf`, your program will be launched with `myfile.pdf` as an argument.
 
