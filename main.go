@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"microzilla/spliter"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -15,12 +16,9 @@ func main() {
 
 	protocol := os.Args[1]
 	programName := os.Args[2]
-	
-	// Optional arguments for the URI handler
-	args := ""
-	if len(os.Args) > 3 {
-		args = os.Args[3]
-	}
+
+	args := spliter.ExtractArgs(protocol)
+	fmt.Println("Args: ", args)
 
 	progPath, err := filepath.Abs(programName)
 	if err != nil {
