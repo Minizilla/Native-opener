@@ -1,4 +1,4 @@
-module microzilla
+module native-opener
 
 go 1.25.1
 

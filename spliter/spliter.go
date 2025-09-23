@@ -7,7 +7,7 @@ import (
 
 // ExtractArgs extracts the arguments from a URI by removing the protocol part
 // and decoding URL-encoded characters
-// Example: "microzilla://test.dwg" -> "test.dwg"
+// Example: "native-opener://test.dwg" -> "test.dwg"
 // Example: "myapp://T%C3%A9l%C3%A9chargements/bridge.dxf" -> "Téléchargements/bridge.dxf"
 func ExtractArgs(uri string) string {
 	// Regex to match protocol:// and capture everything after it

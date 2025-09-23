@@ -5,7 +5,7 @@ import (
 )
 
 func TestExtractArgs(t *testing.T) {
-	const uri = "microzilla://test.dwg"
+	const uri = "native-opener://test.dwg"
 	const args = "test.dwg"
 
 	if args != ExtractArgs(uri) {
@@ -14,7 +14,7 @@ func TestExtractArgs(t *testing.T) {
 }
 
 func TestRecognizesAccents(t *testing.T) {
-	const uri = "microzilla://T%C3%A9l%C3%A9chargements/bridge.dxf"
+	const uri = "native-opener://T%C3%A9l%C3%A9chargements/bridge.dxf"
 	const args = "Téléchargements/bridge.dxf"
 
 	if args != ExtractArgs(uri) {

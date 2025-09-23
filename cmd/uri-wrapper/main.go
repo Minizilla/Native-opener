@@ -9,7 +9,7 @@ import (
 	"strings"
 	"syscall"
 
-	"microzilla/spliter"
+	"native-opener/spliter"
 )
 
 func main() {

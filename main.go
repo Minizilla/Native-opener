@@ -9,7 +9,7 @@ import (
 
 func main() {
 	if len(os.Args) < 3 {
-		fmt.Println("Usage: microzilla <protocol> <programName> [args]")
+		fmt.Println("Usage: native-opener <protocol> <programName> [args]")
 		os.Exit(1)
 	}
 

@@ -31,7 +31,7 @@ func registerMac(protocol, progPath, args string) {
 	<key>CFBundleExecutable</key>
 	<string>%s</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.microzilla.%s</string>
+	<string>com.native-opener.%s</string>
 	<key>CFBundleName</key>
 	<string>%s</string>
 	<key>CFBundleURLTypes</key>
@@ -57,12 +57,12 @@ func registerMac(protocol, progPath, args string) {
 		// Fallback: assume wrapper is in the same directory
 		wrapperPath = "./uri-wrapper"
 	}
-	
+
 	// Create wrapper script with arguments
 	wrapperScript := fmt.Sprintf(`#!/bin/bash
 exec "%s" "%s" %s "$@"
 `, wrapperPath, progPath, args)
-	
+
 	executablePath := filepath.Join(macosPath, filepath.Base(progPath))
 	os.WriteFile(executablePath, []byte(wrapperScript), 0755)
 

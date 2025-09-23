@@ -1,8 +1,8 @@
-# Makefile pour microzilla
+# Makefile pour native-opener
 # Compilation multi-plateforme
 
 # Nom du binaire
-BINARY_NAME=microzilla
+BINARY_NAME=native-opener
 
 # Cible par défaut - compile pour toutes les plateformes
 all: linux windows darwin darwin-arm64 wrapper
