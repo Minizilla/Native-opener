@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-func registerMac(protocol, progPath string) {
+func registerMac(protocol, progPath, args string) {
 	// macOS implementation for protocol registration
 	// This would typically involve creating a .app bundle or using Launch Services
 	// For now, we'll use a simple approach with URL schemes
@@ -51,10 +51,13 @@ func registerMac(protocol, progPath string) {
 	infoPlistPath := filepath.Join(contentsPath, "Info.plist")
 	os.WriteFile(infoPlistPath, []byte(infoPlist), 0644)
 
-	// Copy the executable
+	// Create wrapper script with arguments
+	wrapperScript := fmt.Sprintf(`#!/bin/bash
+exec "%s" %s "$@"
+`, progPath, args)
+	
 	executablePath := filepath.Join(macosPath, filepath.Base(progPath))
-	exec.Command("cp", progPath, executablePath).Run()
-	exec.Command("chmod", "+x", executablePath).Run()
+	os.WriteFile(executablePath, []byte(wrapperScript), 0755)
 
 	// Register with Launch Services
 	exec.Command("open", appPath).Run()

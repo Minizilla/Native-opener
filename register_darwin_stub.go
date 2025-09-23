@@ -2,6 +2,6 @@
 
 package main
 
-func registerMac(protocol, progPath string) {
+func registerMac(protocol, progPath, args string) {
 	// empty declaration, for compilation / typing
 }

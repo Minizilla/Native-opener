@@ -2,6 +2,6 @@
 
 package main
 
-func registerWindows(protocol, progPath string) {
+func registerWindows(protocol, progPath, args string) {
 	// empty declaration, for compilation / typing
 }

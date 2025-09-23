@@ -2,6 +2,6 @@
 
 package main
 
-func registerLinux(protocol, progPath string) {
+func registerLinux(protocol, progPath, args string) {
 	// empty declaration, for compilation / typing
 }

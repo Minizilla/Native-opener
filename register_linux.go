@@ -9,14 +9,14 @@ import (
 	"path/filepath"
 )
 
-func registerLinux(protocol, progPath string) {
+func registerLinux(protocol, progPath, args string) {
 	desktopFile := fmt.Sprintf(`[Desktop Entry]
 Name=%s
-Exec=%s %%u
+Exec=%s %s %%u
 Type=Application
 Terminal=false
 MimeType=x-scheme-handler/%s;
-`, protocol, progPath, protocol)
+`, protocol, progPath, args, protocol)
 
 	appDir := filepath.Join(os.Getenv("HOME"), ".local/share/applications")
 	os.MkdirAll(appDir, 0755)

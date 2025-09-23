@@ -8,7 +8,7 @@ import (
 	"golang.org/x/sys/windows/registry"
 )
 
-func registerWindows(protocol, progPath string) {
+func registerWindows(protocol, progPath, args string) {
 	k, _, err := registry.CreateKey(registry.CLASSES_ROOT, protocol, registry.SET_VALUE)
 	if err != nil {
 		panic(err)
@@ -23,7 +23,7 @@ func registerWindows(protocol, progPath string) {
 	iconKey.Close()
 
 	cmdKey, _, _ := registry.CreateKey(k, `shell\open\command`, registry.SET_VALUE)
-	cmdKey.SetStringValue("", fmt.Sprintf("\"%s\" \"%%1\"", progPath))
+	cmdKey.SetStringValue("", fmt.Sprintf("\"%s\" %s \"%%1\"", progPath, args))
 	cmdKey.Close()
 
 	fmt.Printf("✅ Protocole %s:// enregistré -> %s\n", protocol, progPath)
