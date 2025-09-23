@@ -34,5 +34,5 @@ func registerWindows(protocol, progPath, args string) {
 	cmdKey.SetStringValue("", fmt.Sprintf("\"%s\" \"%s\" %s \"%%1\"", wrapperPath, progPath, args))
 	cmdKey.Close()
 
-	fmt.Printf("✅ Protocole %s:// enregistré -> %s\n", protocol, progPath)
+	fmt.Printf("✅ URI %s:// registered -> Windows Registry\n", protocol)
 }

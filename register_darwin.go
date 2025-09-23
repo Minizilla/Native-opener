@@ -69,5 +69,5 @@ exec "%s" "%s" %s "$@"
 	// Register with Launch Services
 	exec.Command("open", appPath).Run()
 
-	fmt.Printf("✅ Protocole %s:// enregistré -> %s\n", protocol, progPath)
+	fmt.Printf("✅ URI %s:// registered -> %s\n", protocol, appPath)
 }

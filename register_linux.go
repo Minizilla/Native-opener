@@ -35,5 +35,5 @@ MimeType=x-scheme-handler/%s;
 
 	exec.Command("xdg-mime", "default", protocol+".desktop", "x-scheme-handler/"+protocol).Run()
 
-	fmt.Printf("✅ Protocole %s:// enregistré -> %s\n", protocol, progPath)
+	fmt.Printf("✅ URI %s:// registered -> %s\n", protocol, desktopPath)
 }
