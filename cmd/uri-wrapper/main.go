@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/signal"
 	"path/filepath"
 	"strings"
+	"syscall"
 
 	"microzilla/spliter"
 )
@@ -16,54 +18,100 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Get the target program path
 	targetProgram := os.Args[1]
-	
-	// Get additional arguments (if any)
+
 	var additionalArgs []string
 	var uri string
-	
-	// Find the URI (it should be the last argument and contain ://)
+
 	for i := len(os.Args) - 1; i >= 2; i-- {
 		if strings.Contains(os.Args[i], "://") {
 			uri = os.Args[i]
-			// Additional args are between target program and URI
 			additionalArgs = os.Args[2:i]
 			break
 		}
 	}
-	
-	// If no URI found, use the last argument
+
 	if uri == "" && len(os.Args) > 2 {
 		uri = os.Args[len(os.Args)-1]
 		additionalArgs = os.Args[2 : len(os.Args)-1]
 	}
-	
-	// Extract the arguments from the URI
+
 	extractedArgs := spliter.ExtractArgs(uri)
-	
-	// Build the command arguments
+
 	var cmdArgs []string
 	cmdArgs = append(cmdArgs, additionalArgs...)
 	if extractedArgs != "" {
 		cmdArgs = append(cmdArgs, extractedArgs)
 	}
-	
-	// Execute the target program
+
 	execPath, err := filepath.Abs(targetProgram)
 	if err != nil {
 		fmt.Printf("Error: cannot resolve path to %s: %v\n", targetProgram, err)
 		os.Exit(1)
 	}
-	
-	// Execute the program with the extracted arguments
+
 	cmd := exec.Command(execPath, cmdArgs...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
-	
-	if err := cmd.Run(); err != nil {
-		fmt.Printf("Error executing %s: %v\n", execPath, err)
+
+	// Start the process
+	if err := cmd.Start(); err != nil {
+		fmt.Printf("Error starting %s: %v\n", execPath, err)
 		os.Exit(1)
+	}
+
+	// Set up signal handling for cleanup
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+
+	// Start a goroutine to handle cleanup when the process exits
+	go func() {
+		// Wait for the process to finish
+		cmd.Wait()
+
+		// Clean up the downloaded file if it exists
+		if extractedArgs != "" {
+			cleanupFile(extractedArgs)
+		}
+	}()
+
+	// Wait for signals
+	<-sigChan
+
+	// If we receive a signal, kill the process and cleanup
+	cmd.Process.Kill()
+	if extractedArgs != "" {
+		cleanupFile(extractedArgs)
+	}
+}
+
+// cleanupFile removes the downloaded file from the system
+func cleanupFile(filename string) {
+	// Try to find the file in common download locations
+	downloadPaths := []string{
+		filepath.Join(os.Getenv("HOME"), "Downloads", filename),
+		filepath.Join(os.Getenv("HOME"), "Téléchargements", filename),
+		filepath.Join(os.Getenv("USERPROFILE"), "Downloads", filename), // Windows
+	}
+
+	for _, path := range downloadPaths {
+		if _, err := os.Stat(path); err == nil {
+			if err := os.Remove(path); err != nil {
+				fmt.Printf("Warning: could not remove file %s: %v\n", path, err)
+			} else {
+				fmt.Printf("Cleaned up file: %s\n", path)
+			}
+			return
+		}
+	}
+
+	// If file not found in common locations, try the filename as-is
+	if _, err := os.Stat(filename); err == nil {
+		if err := os.Remove(filename); err != nil {
+			fmt.Printf("Warning: could not remove file %s: %v\n", filename, err)
+		} else {
+			fmt.Printf("Cleaned up file: %s\n", filename)
+		}
 	}
 }
