@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"golang.org/x/sys/windows/registry"
 )
@@ -22,8 +23,15 @@ func registerWindows(protocol, progPath, args string) {
 	iconKey.SetStringValue("", progPath+",1")
 	iconKey.Close()
 
+	// Get the path to the uri-wrapper
+	wrapperPath, err := filepath.Abs("./uri-wrapper.exe")
+	if err != nil {
+		// Fallback: assume wrapper is in the same directory
+		wrapperPath = "./uri-wrapper.exe"
+	}
+
 	cmdKey, _, _ := registry.CreateKey(k, `shell\open\command`, registry.SET_VALUE)
-	cmdKey.SetStringValue("", fmt.Sprintf("\"%s\" %s \"%%1\"", progPath, args))
+	cmdKey.SetStringValue("", fmt.Sprintf("\"%s\" \"%s\" %s \"%%1\"", wrapperPath, progPath, args))
 	cmdKey.Close()
 
 	fmt.Printf("✅ Protocole %s:// enregistré -> %s\n", protocol, progPath)

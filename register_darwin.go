@@ -51,10 +51,17 @@ func registerMac(protocol, progPath, args string) {
 	infoPlistPath := filepath.Join(contentsPath, "Info.plist")
 	os.WriteFile(infoPlistPath, []byte(infoPlist), 0644)
 
+	// Get the path to the uri-wrapper
+	wrapperPath, err := filepath.Abs("./uri-wrapper")
+	if err != nil {
+		// Fallback: assume wrapper is in the same directory
+		wrapperPath = "./uri-wrapper"
+	}
+	
 	// Create wrapper script with arguments
 	wrapperScript := fmt.Sprintf(`#!/bin/bash
-exec "%s" %s "$@"
-`, progPath, args)
+exec "%s" "%s" %s "$@"
+`, wrapperPath, progPath, args)
 	
 	executablePath := filepath.Join(macosPath, filepath.Base(progPath))
 	os.WriteFile(executablePath, []byte(wrapperScript), 0755)

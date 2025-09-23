@@ -5,7 +5,7 @@
 BINARY_NAME=microzilla
 
 # Cible par défaut - compile pour toutes les plateformes
-all: linux windows darwin darwin-arm64
+all: linux windows darwin darwin-arm64 wrapper
 
 # Compilation pour Linux (AMD64)
 linux:
@@ -27,10 +27,17 @@ darwin-arm64:
 	@echo "Compilation pour macOS ARM64..."
 	GOOS=darwin GOARCH=arm64 go build -o $(BINARY_NAME)-darwin-arm64 .
 
+# Compilation du wrapper URI
+wrapper:
+	@echo "Compilation du wrapper URI..."
+	go build -o uri-wrapper ./cmd/uri-wrapper
+	GOOS=windows GOARCH=amd64 go build -o uri-wrapper.exe ./cmd/uri-wrapper
+
 # Nettoyage des binaires compilés
 clean:
 	@echo "Nettoyage des binaires..."
 	rm -f $(BINARY_NAME)-linux $(BINARY_NAME).exe $(BINARY_NAME)-darwin $(BINARY_NAME)-darwin-arm64
+	rm -f uri-wrapper uri-wrapper.exe
 
 # Installation des dépendances
 deps:
@@ -66,6 +73,7 @@ help:
 	@echo "  windows      - Compile pour Windows AMD64"
 	@echo "  darwin       - Compile pour macOS Intel"
 	@echo "  darwin-arm64 - Compile pour macOS ARM64"
+	@echo "  wrapper      - Compile le wrapper URI"
 	@echo "  build        - Compile pour la plateforme actuelle"
 	@echo "  clean        - Supprime tous les binaires"
 	@echo "  deps         - Installe les dépendances"
@@ -75,4 +83,4 @@ help:
 	@echo "  help         - Affiche cette aide"
 
 # Déclaration des cibles qui ne correspondent pas à des fichiers
-.PHONY: all linux windows darwin darwin-arm64 clean deps test fmt vet build help
+.PHONY: all linux windows darwin darwin-arm64 wrapper clean deps test fmt vet build help
