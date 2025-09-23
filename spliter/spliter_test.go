@@ -21,3 +21,30 @@ func TestRecognizesAccents(t *testing.T) {
 		t.Error("ExtractArgs should return '", args, "' but returned '", ExtractArgs(uri), "'")
 	}
 }
+
+func TestDecodesSpaces(t *testing.T) {
+	const uri = "myapp://Mon%20Dossier/fichier%20test.txt"
+	const args = "Mon Dossier/fichier test.txt"
+
+	if args != ExtractArgs(uri) {
+		t.Error("ExtractArgs should return '", args, "' but returned '", ExtractArgs(uri), "'")
+	}
+}
+
+func TestDecodesSpecialChars(t *testing.T) {
+	const uri = "myapp://path%2Fwith%2Fslashes%20and%20spaces"
+	const args = "path/with/slashes and spaces"
+
+	if args != ExtractArgs(uri) {
+		t.Error("ExtractArgs should return '", args, "' but returned '", ExtractArgs(uri), "'")
+	}
+}
+
+func TestHandlesNoProtocol(t *testing.T) {
+	const uri = "just-a-filename.txt"
+	const args = "just-a-filename.txt"
+
+	if args != ExtractArgs(uri) {
+		t.Error("ExtractArgs should return '", args, "' but returned '", ExtractArgs(uri), "'")
+	}
+}
