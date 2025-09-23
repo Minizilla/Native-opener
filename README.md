@@ -2,6 +2,10 @@
 
 A tool to register custom URI handlers on Linux, Windows and macOS.
 
+## Demo
+
+Cf. [demo project](https://github.com/Minizilla/Native-opener-demo) 
+
 ## How it works
 
 - Native-opener saves in your OS config file that it should call a Go wrapper when it receives `myapp://myfile.pdf`
