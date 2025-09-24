@@ -10,16 +10,14 @@ import (
 )
 
 func RegisterOnLinux(protocol, progPath, args string) {
-	// Get the path to the uri-wrapper
+
 	wrapperPath, err := findWrapperPath("uri-wrapper")
 	if err != nil {
-		// Fallback: assume wrapper is in the same directory
+
 		wrapperPath = "./uri-wrapper"
 	}
 	fmt.Println("Wrapper path:", wrapperPath)
 
-	// Build the command: uri-wrapper <target_program> [args] <uri>
-	// Quote paths to handle spaces in directory names
 	var wrapperCmd string
 	if args != "" {
 		wrapperCmd = fmt.Sprintf("\"%s\" \"%s\" %s %%u", wrapperPath, progPath, args)

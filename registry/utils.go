@@ -8,23 +8,19 @@ import (
 	"strings"
 )
 
-// findWrapperPath searches for the uri-wrapper binary in common locations
 func findWrapperPath(binaryName string) (string, error) {
 	fmt.Printf("🔍 Searching for uri-wrapper binary: %s\n", binaryName)
 
-	// List of possible locations to search
 	searchPaths := []string{
-		"./",          // Current directory
-		"./dist/",     // GoReleaser dist directory
-		"../dist/",    // Parent dist directory
-		"../../dist/", // Grandparent dist directory
+		"./",
+		"./dist/",
+		"../dist/",
+		"../../dist/",
 	}
 
-	// Search in each path
 	for _, basePath := range searchPaths {
 		fmt.Printf("📁 Searching in: %s\n", basePath)
 
-		// Look for directories matching uri-wrapper_* pattern
 		entries, err := os.ReadDir(basePath)
 		if err != nil {
 			fmt.Printf("❌ Cannot read directory %s: %v\n", basePath, err)
@@ -35,9 +31,8 @@ func findWrapperPath(binaryName string) (string, error) {
 			if entry.IsDir() && strings.HasPrefix(entry.Name(), "uri-wrapper_") {
 				fmt.Printf("📂 Found uri-wrapper directory: %s\n", entry.Name())
 
-				// Check if this directory matches the current OS
 				if isCorrectOS(entry.Name()) {
-					// Found a uri-wrapper directory for the correct OS, check if binary exists
+
 					binaryPath := filepath.Join(basePath, entry.Name(), binaryName)
 					fmt.Printf("🔍 Checking binary: %s\n", binaryPath)
 
@@ -59,7 +54,6 @@ func findWrapperPath(binaryName string) (string, error) {
 		}
 	}
 
-	// Fallback: try direct path
 	fmt.Printf("🔄 Fallback: trying direct path ./%s\n", binaryName)
 	absPath, err := filepath.Abs("./" + binaryName)
 	if err != nil {
@@ -76,14 +70,12 @@ func findWrapperPath(binaryName string) (string, error) {
 	return "", fmt.Errorf("uri-wrapper binary '%s' not found in any of the searched locations: %v", binaryName, searchPaths)
 }
 
-// isCorrectOS checks if the directory name matches the current OS and architecture
 func isCorrectOS(dirName string) bool {
 	currentOS := runtime.GOOS
 	currentArch := runtime.GOARCH
 
 	fmt.Printf("🔍 Checking OS compatibility: %s (current: %s/%s)\n", dirName, currentOS, currentArch)
 
-	// Check for OS match
 	var osMatch bool
 	switch currentOS {
 	case "linux":
@@ -93,7 +85,7 @@ func isCorrectOS(dirName string) bool {
 	case "darwin":
 		osMatch = strings.Contains(dirName, "_darwin_")
 	default:
-		osMatch = true // Unknown OS, be permissive
+		osMatch = true
 	}
 
 	if !osMatch {
@@ -101,7 +93,6 @@ func isCorrectOS(dirName string) bool {
 		return false
 	}
 
-	// Check for architecture match
 	var archMatch bool
 	switch currentArch {
 	case "amd64":
@@ -113,7 +104,7 @@ func isCorrectOS(dirName string) bool {
 	case "arm":
 		archMatch = strings.Contains(dirName, "_arm")
 	default:
-		archMatch = true // Unknown arch, be permissive
+		archMatch = true
 	}
 
 	if !archMatch {
