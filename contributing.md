@@ -8,6 +8,30 @@
 - Git
 - GitHub account
 
+### Installing GoReleaser
+
+GoReleaser is required for building and releasing. Choose your preferred installation method:
+
+#### Quick Install (Recommended)
+```bash
+# Using go install (requires Go 1.24+)
+go install github.com/goreleaser/goreleaser/v2@latest
+
+# Or using Homebrew (macOS/Linux)
+brew install goreleaser
+
+# Or using the bash script (works everywhere)
+curl -sfL https://goreleaser.com/static/run | bash -s -- check
+```
+
+#### Other Installation Methods
+For more installation options including package managers, Docker, and manual installation, see the [official GoReleaser installation guide](https://goreleaser.com/install/).
+
+#### Verify Installation
+```bash
+goreleaser --version
+```
+
 ### Setup for Fork/Clone
 
 If you're working with a forked repository, you'll need to set up a GitHub token:
@@ -30,6 +54,47 @@ If you're working with a forked repository, you'll need to set up a GitHub token
    - Make your changes
    - Commit your work
    - Push to your fork
+
+## 🔨 Building for Development
+
+### Local Builds (No Release)
+
+For development and testing, you can build binaries without creating a GitHub release:
+
+```bash
+# Build for all configured platforms
+goreleaser build
+
+# Build with snapshot version (includes timestamp)
+goreleaser build --snapshot
+
+# Build only for specific platforms
+goreleaser build --snapshot --id=linux-amd64
+
+# Clean previous builds first
+goreleaser build --clean
+```
+
+### Build Output
+
+The built binaries will be available in the `dist/` directory:
+```
+dist/
+├── native-opener-linux-amd64/
+├── native-opener-windows-amd64/
+├── native-opener-darwin-amd64/
+└── native-opener-darwin-arm64/
+```
+
+### Testing Your Builds
+
+```bash
+# Test the built binary
+./dist/native-opener-linux-amd64/native-opener --version
+
+# Or run with your protocol
+./dist/native-opener-linux-amd64/native-opener myprotocol /usr/bin/freecad
+```
 
 ## 📦 Creating a Release
 
@@ -75,7 +140,16 @@ This will:
    go build
    ```
 
-5. **Commit and push**
+5. **Build with GoReleaser (without releasing)**
+   ```bash
+   # Build binaries for all platforms without creating a release
+   goreleaser build
+   
+   # Or build for specific platforms only
+   goreleaser build --snapshot
+   ```
+
+6. **Commit and push**
 
    ```bash
    git add .
@@ -83,7 +157,7 @@ This will:
    git push origin feature/your-feature-name
    ```
 
-6. **Create a Pull Request**
+7. **Create a Pull Request**
 
 ## 📋 Code Standards
 
