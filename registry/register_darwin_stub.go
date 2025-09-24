@@ -1,6 +1,6 @@
 //go:build !darwin
 
-package main
+package registry
 
 func RegisterOnMac(protocol, progPath, args string) {
 	// empty declaration, for compilation / typing

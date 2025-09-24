@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+
+	"github.com/Minizilla/Native-opener/registry"
 )
 
 func main() {
@@ -29,11 +31,11 @@ func main() {
 
 	switch runtime.GOOS {
 	case "windows":
-		RegisterOnWindows(protocol, progPath, args)
+		registry.RegisterOnWindows(protocol, progPath, args)
 	case "linux":
-		RegisterOnLinux(protocol, progPath, args)
+		registry.RegisterOnLinux(protocol, progPath, args)
 	case "darwin":
-		RegisterOnMac(protocol, progPath, args)
+		registry.RegisterOnMac(protocol, progPath, args)
 	default:
 		fmt.Println("OS non supporté :", runtime.GOOS)
 	}

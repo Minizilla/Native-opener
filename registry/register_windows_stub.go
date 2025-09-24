@@ -1,6 +1,6 @@
 //go:build !windows
 
-package main
+package registry
 
 func RegisterOnWindows(protocol, progPath, args string) {
 	// empty declaration, for compilation / typing

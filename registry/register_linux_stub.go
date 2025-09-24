@@ -1,6 +1,6 @@
 //go:build !linux
 
-package main
+package registry
 
 func RegisterOnLinux(protocol, progPath, args string) {
 	// empty declaration, for compilation / typing
