@@ -8,8 +8,15 @@ import (
 	"strings"
 )
 
+// isDevMode checks if we're in development mode
+func isDevMode() bool {
+	return os.Getenv("NATIVE_OPENER_DEV") == "true" || os.Getenv("DEBUG") == "true"
+}
+
 func findWrapperPath(binaryName string) (string, error) {
-	fmt.Printf("🔍 Searching for uri-wrapper binary: %s\n", binaryName)
+	if isDevMode() {
+		fmt.Printf("🔍 Searching for uri-wrapper binary: %s\n", binaryName)
+	}
 
 	searchPaths := []string{
 		"./",
@@ -19,54 +26,78 @@ func findWrapperPath(binaryName string) (string, error) {
 	}
 
 	for _, basePath := range searchPaths {
-		fmt.Printf("📁 Searching in: %s\n", basePath)
+		if isDevMode() {
+			fmt.Printf("📁 Searching in: %s\n", basePath)
+		}
 
 		entries, err := os.ReadDir(basePath)
 		if err != nil {
-			fmt.Printf("❌ Cannot read directory %s: %v\n", basePath, err)
+			if isDevMode() {
+				fmt.Printf("❌ Cannot read directory %s: %v\n", basePath, err)
+			}
 			continue
 		}
 
 		for _, entry := range entries {
 			if entry.IsDir() && strings.HasPrefix(entry.Name(), "uri-wrapper_") {
-				fmt.Printf("📂 Found uri-wrapper directory: %s\n", entry.Name())
+				if isDevMode() {
+					fmt.Printf("📂 Found uri-wrapper directory: %s\n", entry.Name())
+				}
 
 				if isCorrectOS(entry.Name()) {
 
 					binaryPath := filepath.Join(basePath, entry.Name(), binaryName)
-					fmt.Printf("🔍 Checking binary: %s\n", binaryPath)
+					if isDevMode() {
+						fmt.Printf("🔍 Checking binary: %s\n", binaryPath)
+					}
 
 					if _, err := os.Stat(binaryPath); err == nil {
 						absPath, err := filepath.Abs(binaryPath)
 						if err == nil {
-							fmt.Printf("✅ Found uri-wrapper: %s\n", absPath)
+							if isDevMode() {
+								fmt.Printf("✅ Found uri-wrapper: %s\n", absPath)
+							}
 							return absPath, nil
 						} else {
-							fmt.Printf("❌ Cannot get absolute path: %v\n", err)
+							if isDevMode() {
+								fmt.Printf("❌ Cannot get absolute path: %v\n", err)
+							}
 						}
 					} else {
-						fmt.Printf("❌ Binary not found: %v\n", err)
+						if isDevMode() {
+							fmt.Printf("❌ Binary not found: %v\n", err)
+						}
 					}
 				} else {
-					fmt.Printf("⚠️  Skipping %s (wrong OS)\n", entry.Name())
+					if isDevMode() {
+						fmt.Printf("⚠️  Skipping %s (wrong OS)\n", entry.Name())
+					}
 				}
 			}
 		}
 	}
 
-	fmt.Printf("🔄 Fallback: trying direct path ./%s\n", binaryName)
+	if isDevMode() {
+		fmt.Printf("🔄 Fallback: trying direct path ./%s\n", binaryName)
+	}
 	absPath, err := filepath.Abs("./" + binaryName)
 	if err != nil {
-		fmt.Printf("❌ Cannot get absolute path for fallback: %v\n", err)
+		if isDevMode() {
+			fmt.Printf("❌ Cannot get absolute path for fallback: %v\n", err)
+		}
 		return "", fmt.Errorf("cannot resolve fallback path for %s: %v", binaryName, err)
 	}
 
 	if _, err := os.Stat(absPath); err == nil {
-		fmt.Printf("✅ Found uri-wrapper (fallback): %s\n", absPath)
+		if isDevMode() {
+			fmt.Printf("✅ Found uri-wrapper (fallback): %s\n", absPath)
+		}
 		return absPath, nil
 	}
 
-	fmt.Printf("❌ uri-wrapper not found in any location\n")
+	if isDevMode() {
+		fmt.Printf("❌ uri-wrapper not found in any location\n")
+	}
 	return "", fmt.Errorf("uri-wrapper binary '%s' not found in any of the searched locations: %v", binaryName, searchPaths)
 }
 
@@ -74,7 +105,9 @@ func isCorrectOS(dirName string) bool {
 	currentOS := runtime.GOOS
 	currentArch := runtime.GOARCH
 
-	fmt.Printf("🔍 Checking OS compatibility: %s (current: %s/%s)\n", dirName, currentOS, currentArch)
+	if isDevMode() {
+		fmt.Printf("🔍 Checking OS compatibility: %s (current: %s/%s)\n", dirName, currentOS, currentArch)
+	}
 
 	var osMatch bool
 	switch currentOS {
@@ -89,7 +122,9 @@ func isCorrectOS(dirName string) bool {
 	}
 
 	if !osMatch {
-		fmt.Printf("❌ OS mismatch: %s (expected %s)\n", dirName, currentOS)
+		if isDevMode() {
+			fmt.Printf("❌ OS mismatch: %s (expected %s)\n", dirName, currentOS)
+		}
 		return false
 	}
 
@@ -108,10 +143,14 @@ func isCorrectOS(dirName string) bool {
 	}
 
 	if !archMatch {
-		fmt.Printf("❌ Architecture mismatch: %s (expected %s)\n", dirName, currentArch)
+		if isDevMode() {
+			fmt.Printf("❌ Architecture mismatch: %s (expected %s)\n", dirName, currentArch)
+		}
 		return false
 	}
 
-	fmt.Printf("✅ OS and architecture match: %s\n", dirName)
+	if isDevMode() {
+		fmt.Printf("✅ OS and architecture match: %s\n", dirName)
+	}
 	return true
 }
