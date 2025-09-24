@@ -16,7 +16,20 @@ before:
     - go generate ./...
 
 builds:
-  - env:
+  - id: "uri-wrapper"
+    main: ./uriwrapper/main.go
+    binary: "uri-wrapper"
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+
+  - id: "native-opener"
+    main: ./main.go
+    binary: "native-opener"
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
