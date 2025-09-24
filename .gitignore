@@ -2,3 +2,5 @@ native-opener-*
 native-opener.exe
 uri-wrapper
 uri-wrapper.exe
+# Added by goreleaser init:
+dist/
