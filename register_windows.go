@@ -9,7 +9,7 @@ import (
 	"golang.org/x/sys/windows/registry"
 )
 
-func registerWindows(protocol, progPath, args string) {
+func RegisterOnWindows(protocol, progPath, args string) {
 	k, _, err := registry.CreateKey(registry.CLASSES_ROOT, protocol, registry.SET_VALUE)
 	if err != nil {
 		panic(err)

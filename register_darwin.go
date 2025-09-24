@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-func registerMac(protocol, progPath, args string) {
+func RegisterOnMac(protocol, progPath, args string) {
 	// macOS implementation for protocol registration
 	// This would typically involve creating a .app bundle or using Launch Services
 	// For now, we'll use a simple approach with URL schemes

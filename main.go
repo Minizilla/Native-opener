@@ -29,11 +29,11 @@ func main() {
 
 	switch runtime.GOOS {
 	case "windows":
-		registerWindows(protocol, progPath, args)
+		RegisterOnWindows(protocol, progPath, args)
 	case "linux":
-		registerLinux(protocol, progPath, args)
+		RegisterOnLinux(protocol, progPath, args)
 	case "darwin":
-		registerMac(protocol, progPath, args)
+		RegisterOnMac(protocol, progPath, args)
 	default:
 		fmt.Println("OS non supporté :", runtime.GOOS)
 	}

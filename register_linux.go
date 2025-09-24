@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-func registerLinux(protocol, progPath, args string) {
+func RegisterOnLinux(protocol, progPath, args string) {
 	// Get the path to the uri-wrapper
 	wrapperPath, err := filepath.Abs("./uri-wrapper")
 	if err != nil {
