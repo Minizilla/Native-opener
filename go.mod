@@ -1,4 +1,4 @@
-module native-opener
+module github.com/Minizilla/Native-opener
 
 go 1.25.1
 
