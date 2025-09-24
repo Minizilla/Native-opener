@@ -4,3 +4,5 @@ uri-wrapper
 uri-wrapper.exe
 # Added by goreleaser init:
 dist/
+native-opener
+Native-opener

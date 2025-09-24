@@ -52,7 +52,7 @@ func RegisterOnMac(protocol, progPath, args string) {
 	os.WriteFile(infoPlistPath, []byte(infoPlist), 0644)
 
 	// Get the path to the uri-wrapper
-	wrapperPath, err := filepath.Abs("./uri-wrapper")
+	wrapperPath, err := findWrapperPath("uri-wrapper")
 	if err != nil {
 		// Fallback: assume wrapper is in the same directory
 		wrapperPath = "./uri-wrapper"

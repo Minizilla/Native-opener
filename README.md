@@ -17,7 +17,7 @@ Cf. [demo project](https://github.com/Minizilla/Native-opener-demo)
 ### 1. Compile the tools
 
 ```bash
-make all
+go build -o native-opener . && go build -o uri-wrapper ./uriwrapper
 ```
 
 ### 2. Register a URI handler

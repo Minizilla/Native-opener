@@ -4,7 +4,6 @@ package registry
 
 import (
 	"fmt"
-	"path/filepath"
 
 	"golang.org/x/sys/windows/registry"
 )
@@ -24,7 +23,7 @@ func RegisterOnWindows(protocol, progPath, args string) {
 	iconKey.Close()
 
 	// Get the path to the uri-wrapper
-	wrapperPath, err := filepath.Abs("./uri-wrapper.exe")
+	wrapperPath, err := findWrapperPath("uri-wrapper.exe")
 	if err != nil {
 		// Fallback: assume wrapper is in the same directory
 		wrapperPath = "./uri-wrapper.exe"

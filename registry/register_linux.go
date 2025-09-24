@@ -11,7 +11,7 @@ import (
 
 func RegisterOnLinux(protocol, progPath, args string) {
 	// Get the path to the uri-wrapper
-	wrapperPath, err := filepath.Abs("./uri-wrapper")
+	wrapperPath, err := findWrapperPath("uri-wrapper")
 	if err != nil {
 		// Fallback: assume wrapper is in the same directory
 		wrapperPath = "./uri-wrapper"
@@ -20,11 +20,16 @@ func RegisterOnLinux(protocol, progPath, args string) {
 
 	// Build the command: uri-wrapper <target_program> [args] <uri>
 	// Quote paths to handle spaces in directory names
-	wrapperCmd := fmt.Sprintf("\"%s\" \"%s\" %s", wrapperPath, progPath, args)
+	var wrapperCmd string
+	if args != "" {
+		wrapperCmd = fmt.Sprintf("\"%s\" \"%s\" %s %%u", wrapperPath, progPath, args)
+	} else {
+		wrapperCmd = fmt.Sprintf("\"%s\" \"%s\" %%u", wrapperPath, progPath)
+	}
 
 	desktopFile := fmt.Sprintf(`[Desktop Entry]
 Name=%s
-Exec=%s %%u
+Exec=%s
 Type=Application
 Terminal=false
 MimeType=x-scheme-handler/%s;
