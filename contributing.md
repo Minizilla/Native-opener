@@ -62,17 +62,14 @@ If you're working with a forked repository, you'll need to set up a GitHub token
 For development and testing, you can build binaries without creating a GitHub release:
 
 ```bash
-# Build for all configured platforms
-goreleaser build
-
-# Build with snapshot version (includes timestamp)
-goreleaser build --snapshot
+# Build for all configured platforms (local snapshot)
+goreleaser release --snapshot --clean
 
 # Build only for specific platforms
-goreleaser build --snapshot --id=linux-amd64
+goreleaser release --snapshot --clean --id=linux-amd64
 
-# Clean previous builds first
-goreleaser build --clean
+# Build without cleaning previous builds
+goreleaser release --snapshot
 ```
 
 ### Build Output
@@ -140,13 +137,13 @@ This will:
    go build
    ```
 
-5. **Build with GoReleaser (without releasing)**
+5. **Build with GoReleaser (local snapshot)**
    ```bash
-   # Build binaries for all platforms without creating a release
-   goreleaser build
+   # Build binaries for all platforms without creating a GitHub release
+   goreleaser release --snapshot --clean
    
    # Or build for specific platforms only
-   goreleaser build --snapshot
+   goreleaser release --snapshot --clean --id=linux-amd64
    ```
 
 6. **Commit and push**
