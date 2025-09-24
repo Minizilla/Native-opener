@@ -95,14 +95,23 @@ dist/
 
 ## 📦 Creating a Release
 
-### Step 1: Tag the Release
+### Step 1: Push Your Changes
+
+```bash
+# Make sure all your changes are committed and pushed
+git add .
+git commit -m "Prepare for release v0.1.0"
+git push origin main
+```
+
+### Step 2: Tag the Release
 
 ```bash
 git tag -a v0.1.0 -m "Release v0.1.0: Initial release"
 git push origin v0.1.0
 ```
 
-### Step 2: Build and Release
+### Step 3: Build and Release
 
 ```bash
 goreleaser release --clean
