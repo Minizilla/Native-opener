@@ -7,10 +7,10 @@ import (
 
 // Test helper function to extract command from desktop entry
 func extractExecFromDesktopEntry(desktopContent string) string {
-	lines := strings.Split(desktopContent, "\n")
-	for _, line := range lines {
-		if strings.HasPrefix(line, "Exec=") {
-			return strings.TrimPrefix(line, "Exec=")
+	lines := strings.SplitSeq(desktopContent, "\n")
+	for line := range lines {
+		if after, ok := strings.CutPrefix(line, "Exec="); ok {
+			return after
 		}
 	}
 	return ""
@@ -18,22 +18,20 @@ func extractExecFromDesktopEntry(desktopContent string) string {
 
 // Test helper function to extract command from bash script
 func extractExecFromBashScript(scriptContent string) string {
-	lines := strings.Split(scriptContent, "\n")
-	for _, line := range lines {
-		if strings.HasPrefix(line, "exec ") {
-			return strings.TrimPrefix(line, "exec ")
+	lines := strings.SplitSeq(scriptContent, "\n")
+	for line := range lines {
+		if after, ok := strings.CutPrefix(line, "exec "); ok {
+			return after
 		}
 	}
 	return ""
 }
 
 func TestLinuxPathQuoting(t *testing.T) {
-	// Test with path containing spaces
 	protocol := "testapp"
 	progPath := "/home/user/My Documents/native-opener/uri-wrapper"
 	args := "--verbose"
 
-	// Simulate the desktop entry generation
 	wrapperCmd := `"` + progPath + `" "/usr/bin/freecad" ` + args
 
 	desktopFile := `[Desktop Entry]
