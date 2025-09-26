@@ -7,10 +7,10 @@ import (
 
 // Test helper function to extract command from desktop entry
 func extractExecFromDesktopEntry(desktopContent string) string {
-	lines := strings.SplitSeq(desktopContent, "\n")
-	for line := range lines {
-		if after, ok := strings.CutPrefix(line, "Exec="); ok {
-			return after
+	lines := strings.Split(desktopContent, "\n")
+	for _, line := range lines {
+		if strings.HasPrefix(line, "Exec=") {
+			return strings.TrimPrefix(line, "Exec=")
 		}
 	}
 	return ""
@@ -18,10 +18,10 @@ func extractExecFromDesktopEntry(desktopContent string) string {
 
 // Test helper function to extract command from bash script
 func extractExecFromBashScript(scriptContent string) string {
-	lines := strings.SplitSeq(scriptContent, "\n")
-	for line := range lines {
-		if after, ok := strings.CutPrefix(line, "exec "); ok {
-			return after
+	lines := strings.Split(scriptContent, "\n")
+	for _, line := range lines {
+		if strings.HasPrefix(line, "exec ") {
+			return strings.TrimPrefix(line, "exec ")
 		}
 	}
 	return ""
