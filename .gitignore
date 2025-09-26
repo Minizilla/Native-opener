@@ -1,8 +1,8 @@
-native-opener-*
-native-opener.exe
-uri-wrapper
-uri-wrapper.exe
 # Added by goreleaser init:
 dist/
 native-opener
 Native-opener
+/nopn
+/nopn.exe
+/uri-wrapper
+/uri-wrapper.exe

@@ -18,8 +18,8 @@ Cf. [demo project](https://github.com/Minizilla/Native-opener-demo)
 
 ```bash
 # Install both required binaries
-go install github.com/Minizilla/Native-opener/cmd/nopn@latest
-go install github.com/Minizilla/Native-opener/cmd/uri-wrapper@latest
+go install github.com/Minizilla/Native-opener/cmd/nopn
+go install github.com/Minizilla/Native-opener/cmd/uri-wrapper
 ```
 
 This will install:
