@@ -3,6 +3,7 @@ package registry
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -18,6 +19,20 @@ func findWrapperPath(binaryName string) (string, error) {
 		fmt.Printf("🔍 Searching for uri-wrapper binary: %s\n", binaryName)
 	}
 
+	// First, try to find the binary in PATH
+	path, err := exec.LookPath(binaryName)
+	if err == nil {
+		if isDevMode() {
+			fmt.Printf("✅ Found uri-wrapper in PATH: %s\n", path)
+		}
+		return path, nil
+	}
+
+	if isDevMode() {
+		fmt.Printf("❌ uri-wrapper not found in PATH: %v\n", err)
+	}
+
+	// Fallback: search in local directories (for development)
 	searchPaths := []string{
 		"./",
 		"./dist/",
@@ -98,7 +113,7 @@ func findWrapperPath(binaryName string) (string, error) {
 	if isDevMode() {
 		fmt.Printf("❌ uri-wrapper not found in any location\n")
 	}
-	return "", fmt.Errorf("uri-wrapper binary '%s' not found in any of the searched locations: %v", binaryName, searchPaths)
+	return "", fmt.Errorf("uri-wrapper binary '%s' not found in PATH or local directories", binaryName)
 }
 
 func isCorrectOS(dirName string) bool {

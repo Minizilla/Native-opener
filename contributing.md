@@ -10,11 +10,17 @@
 
 ### Quick Install (for users)
 
-Users can install the tool directly:
+Users can install both required tools directly:
 
 ```bash
+# Install both required binaries
 go install github.com/Minizilla/Native-opener/cmd/nopn@latest
+go install github.com/Minizilla/Native-opener/cmd/uri-wrapper@latest
 ```
+
+This installs:
+- `nopn` - The main command to register URI handlers
+- `uri-wrapper` - The wrapper that handles URI calls (automatically found by `nopn`)
 
 ### Installing GoReleaser
 
@@ -94,11 +100,14 @@ dist/
 ### Testing Your Builds
 
 ```bash
-# Test the built binary
+# Test the main command
 ./dist/native-opener-linux-amd64/native-opener myprotocol /usr/bin/freecad
 
-# Or test the uri-wrapper
+# Test the uri-wrapper
 ./dist/uri-wrapper-linux-amd64/uri-wrapper /usr/bin/freecad myfile.pdf
+
+# Test URI handling (after registration)
+# Click on myprotocol://testfile.dwg in your browser
 ```
 
 ## 📦 Creating a Release
@@ -131,6 +140,18 @@ This will:
 - Create a GitHub release
 - Upload assets automatically
 
+## 📁 Project Structure
+
+```
+native-opener/
+├── cmd/
+│   ├── nopn/           # Main command (register URI handlers)
+│   └── uri-wrapper/    # URI wrapper (handles URI calls)
+├── registry/           # Cross-platform registry package
+├── spliter/            # URI parsing package
+└── ...
+```
+
 ## 🔧 Development Workflow
 
 1. **Fork the repository**
@@ -150,9 +171,16 @@ This will:
 4. **Make your changes and test**
 
    ```bash
+   # Run tests
    go test ./...
+   
+   # Build both commands
    go build ./cmd/nopn
-   go build ./uriwrapper
+   go build ./cmd/uri-wrapper
+   
+   # Test the commands
+   ./nopn
+   ./uri-wrapper
    ```
 
 5. **Build with GoReleaser (local snapshot)**

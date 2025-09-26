@@ -14,11 +14,17 @@ Cf. [demo project](https://github.com/Minizilla/Native-opener-demo)
 
 ## Installation
 
-### Quick Install
+### Quick Install (Recommended)
 
 ```bash
+# Install both required binaries
 go install github.com/Minizilla/Native-opener/cmd/nopn@latest
+go install github.com/Minizilla/Native-opener/cmd/uri-wrapper@latest
 ```
+
+This will install:
+- `nopn` - The main command to register URI handlers
+- `uri-wrapper` - The wrapper that handles URI calls (automatically found by `nopn`)
 
 ### Manual Build
 
@@ -29,18 +35,28 @@ cd native-opener
 
 # Build the tools
 go build -o native-opener ./cmd/nopn
-go build -o uri-wrapper ./uriwrapper
+go build -o uri-wrapper ./cmd/uri-wrapper
 ```
 
 ## Usage
 
+### Verify Installation
+
+```bash
+# Check that both commands are available
+nopn
+uri-wrapper
+```
+
+Both commands will show their usage information when called without arguments.
+
 ### Register a URI handler
 
 ```bash
-native-opener myapp /path/to/your/program/to/execute
+nopn myapp /path/to/your/program/to/execute
 ```
 
-### 3. Use the URI
+### Use the URI
 
 When someone clicks on `myapp://myfile.pdf`, your program will be launched with `myfile.pdf` as an argument.
 

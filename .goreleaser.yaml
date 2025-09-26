@@ -17,7 +17,7 @@ before:
 
 builds:
   - id: "uri-wrapper"
-    main: ./uriwrapper/main.go
+    main: ./cmd/uri-wrapper/main.go
     binary: "uri-wrapper"
     env:
       - CGO_ENABLED=0
