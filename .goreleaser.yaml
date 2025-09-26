@@ -27,7 +27,7 @@ builds:
       - darwin
 
   - id: "native-opener"
-    main: ./main.go
+    main: ./cmd/nopn/main.go
     binary: "native-opener"
     env:
       - CGO_ENABLED=0

@@ -12,18 +12,32 @@ Cf. [demo project](https://github.com/Minizilla/Native-opener-demo)
 
 - This wrapper handles extracting arguments like `myfile.pdf` and passes them to the application you specified during URI registration
 
-## Usage
+## Installation
 
-### 1. Compile the tools
+### Quick Install
 
 ```bash
-go build -o native-opener . && go build -o uri-wrapper ./uriwrapper
+go install github.com/Minizilla/Native-opener/cmd/nopn@latest
 ```
 
-### 2. Register a URI handler
+### Manual Build
 
 ```bash
-./native-opener myapp /path/to/your/program/to/execute
+# Clone the repository
+git clone https://github.com/Minizilla/Native-opener.git
+cd native-opener
+
+# Build the tools
+go build -o native-opener ./cmd/nopn
+go build -o uri-wrapper ./uriwrapper
+```
+
+## Usage
+
+### Register a URI handler
+
+```bash
+native-opener myapp /path/to/your/program/to/execute
 ```
 
 ### 3. Use the URI

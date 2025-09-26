@@ -8,6 +8,14 @@
 - Git
 - GitHub account
 
+### Quick Install (for users)
+
+Users can install the tool directly:
+
+```bash
+go install github.com/Minizilla/Native-opener/cmd/nopn@latest
+```
+
 ### Installing GoReleaser
 
 GoReleaser is required for building and releasing. Choose your preferred installation method:
@@ -87,10 +95,10 @@ dist/
 
 ```bash
 # Test the built binary
-./dist/native-opener-linux-amd64/native-opener --version
-
-# Or run with your protocol
 ./dist/native-opener-linux-amd64/native-opener myprotocol /usr/bin/freecad
+
+# Or test the uri-wrapper
+./dist/uri-wrapper-linux-amd64/uri-wrapper /usr/bin/freecad myfile.pdf
 ```
 
 ## 📦 Creating a Release
@@ -143,7 +151,8 @@ This will:
 
    ```bash
    go test ./...
-   go build
+   go build ./cmd/nopn
+   go build ./uriwrapper
    ```
 
 5. **Build with GoReleaser (local snapshot)**
